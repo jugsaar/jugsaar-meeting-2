@@ -26,12 +26,17 @@ import java.lang.invoke.MethodType;
 public class MethodHandleCurryingExample {
 
 	public static void main(String[] args) throws Throwable {
+
 		MethodHandles.Lookup lookup = MethodHandles.lookup();
-		MethodHandle sum = lookup.findStatic(Integer.class, "sum",
+		MethodHandle sum = lookup.findStatic(MethodHandleCurryingExample.class, "sum",
 				MethodType.methodType(int.class, new Class[] { int.class, int.class }));
 		// Currying
-		MethodHandle plus1 = MethodHandles.insertArguments(sum, 0, 1);
-		int result = (int) plus1.invokeExact(2);
-		System.out.println(result); // Output: 3
+		MethodHandle plus42 = MethodHandles.insertArguments(sum, 0, 42);
+		int result = (int) plus42.invokeExact(2);
+		System.out.println(result); // Output: 44
+	}
+
+	public static int sum(int a, int b) {
+		return a + b;
 	}
 }
